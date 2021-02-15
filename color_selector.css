@@ -7,22 +7,24 @@ body {
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: darkgray;
+    background-color: rgb(223, 219, 219);
 }
 
 #converter {
-    background-color: darkgreen;
+    background-color: whitesmoke;
     position: absolute;
+    top: 10vh;
+    left: 10%;
     padding: 20px;
     width: 300px;
     height: 250px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    border-radius: 7px;
 }
 
 #selector_container {
-    background-color: darkgrey;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,7 +32,6 @@ body {
 }
 
 #display {
-    background-color: darkgray;
     padding: 5px;
     height: 150px;
     display: flex;
@@ -39,11 +40,18 @@ body {
 }
 
 #color_field {
-    height: 50px;
-    border: 2px solid black;
+    height: 60px;
+    border-radius: 7px;
+}
+
+input {
+    border: none;
+    background-color: whitesmoke;
+    width: 60px;
+    height: 40px;
 }
 
 .value {
-    background-color: darkkhaki;
+    
 }
 
