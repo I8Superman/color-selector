@@ -15,35 +15,37 @@ function init() {
   input.addEventListener("input", handleInput);
 }
 
-function handleInput(e) {
-  const hexCode = e.target.value; // Get the hexcode from the input event
-  colorOb.hex = hexCode; // Send hex code to color object (above)
-  hexToRgb(hexCode); // Send value of input to these functions (hex code)
-  const r = colorOb.rgb.r; // Get the freshly generated rgb code from the color object
-  const g = colorOb.rgb.g;
-  const b = colorOb.rgb.b;
-  hexToHsl(r, g, b); // Send the rgb code to be converted to HSL
-  displayColor(); // Display ecerything
+function handleInput(e) { // The delegator function
+  // Convert hex to rgb, hsl and css:
+  const hexCode = e.target.value; // Get the hexcode from input event
+  const rgbObj = hexToRgb(hexCode); // Conv hex to rgb, return obj
+  const hslCode = rgbToHsl(rgbObj); // Conv rgb to hsl
+  const cssCode = rgbToCss(rgbObj);
+
+  // Display everything:
+  displayColorField(cssCode);
+  displayHexCode(hexCode);
+  displayRgbCode(rgbObj);
+  displayHslCode(hslCode);
 }
 
 function hexToRgb(hexCode) {
-  // Get the individual color parts, excluding the '#'
-  const redPart = hexCode.substring(1, 3);
-  const greenPart = hexCode.substring(3, 5);
-  const bluePart = hexCode.substring(5, 7);
-  // Convert the parts to RGB
-  const r = Number.parseInt(redPart, 16);
-  const g = Number.parseInt(greenPart, 16);
-  const b = Number.parseInt(bluePart, 16);
-  // Write the values to the color object
-  colorOb.rgb.r = r;
-  colorOb.rgb.g = g;
-  colorOb.rgb.b = b;
+  const r = parseInt(hexCode.substring(1, 3), 16); // Convert hex values to rgb
+  const g = parseInt(hexCode.substring(3, 5), 16); 
+  const b = parseInt(hexCode.substring(5, 7), 16);
+  
+  return {r, g, b};
 }
 
-function hexToHsl(r, g, b) { // recieves rgb code and translates the 3 numbers to letter parameters
-  // Convert values (total black box!)
-  r /= 255;
+function rgbToCss(rgbObj) {
+  const cssRgb = `rgb(${rgbObj.r} ${rgbObj.g} ${rgbObj.b})`;
+
+  return cssRgb;
+}
+
+function rgbToHsl({r, g, b}) {
+  
+  r /= 255;        // Convert values (total black box!)
   g /= 255;
   b /= 255;
 
@@ -77,23 +79,36 @@ function hexToHsl(r, g, b) { // recieves rgb code and translates the 3 numbers t
   s *= 100;
   l *= 100;
 
-  // Send HSL code to color object and round to neaerest whole number also
-  colorOb.hsl.h = Number(h.toFixed(0));
-  colorOb.hsl.s = Number(s.toFixed(0));
-  colorOb.hsl.l = Number(l.toFixed(0));
+  h = Math.round(h); // Return HSL results, rounded to 0 decimals
+  s = Math.round(s);
+  l = Math.round(l);
+  
+  return {h, s, l};
 }
 
-function displayColor() {
-    // Get the color data from the color object
-    const hex = colorOb.hex
-    const rgb = `${colorOb.rgb.r}, ${colorOb.rgb.g}, ${colorOb.rgb.b}`
-    const hsl = `${colorOb.hsl.h}, ${colorOb.hsl.s}, ${colorOb.hsl.l}`
-    
-    // Display values in value fields
-    qs('.hex > span').textContent = hex;
-    qs('.rgb > span').textContent = rgb;
-    qs('.hsl > span').textContent = hsl;
+function displayColorField(cssCode) {
     // Show color in color field
     const colField = qs('#color_field');
-    colField.style.backgroundColor = `${hex}`;
+    colField.style.backgroundColor = `${cssCode}`;
 }
+
+function displayHexCode(hexCode) {
+  qs('.hex > span').textContent = `${hexCode}`;
+}
+
+function displayRgbCode({r, g, b}) {
+  qs('.rgb > span').textContent = `${r}, ${g}, ${b}`;
+}
+
+function displayHslCode({h, s, l}) {
+  qs('.hsl > span').textContent = `${h}, ${s}%, ${l}%`;
+}
+
+// Not really needed for this assignment:
+
+// function rgbToHex() {
+//   const redPart = rgbCode.substring(0, rgbCode.indexOf(" "));
+//   const redHex = Number(redPart).toString(16).padStart(2, "0");
+// }
+// Display values in value fields
+  
