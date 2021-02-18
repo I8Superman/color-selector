@@ -4,12 +4,6 @@ const qs = (s) => document.querySelector(s);
 
 window.addEventListener("DOMContentLoaded", init);
 
-const colorOb = {
-  hex: "",
-  rgb: { r: 0, g: 0, b: 0 },
-  hsl: { h: 0, s: 0, l: 0 },
-};
-
 function init() {
   const input = qs("input");
   input.addEventListener("input", handleInput);
